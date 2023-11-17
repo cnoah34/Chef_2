@@ -7,10 +7,13 @@ class Player
 {
 
     public:
-        Player(sf::Texture initTexture);
+        Player();
+        void initTexture(sf::Texture texture);
+
+        sf::Texture playerTexture;
+        sf::Sprite playerSprite;
 
     private:
-        sf::Texture texture;
 };
 
 #endif

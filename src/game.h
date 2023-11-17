@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include <SFML/Graphics.hpp>
+#include "player.h"
 
 #include <unordered_map>
 #include <string>
@@ -14,7 +15,8 @@ class Game
 
     private:
         sf::RenderWindow window;
-        sf::Sprite player;
+
+        Player player;
 
         std::unordered_map<std::string, sf::Texture> textureMap; // a map to contain all of the entity textures
 

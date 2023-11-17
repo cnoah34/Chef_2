@@ -36,10 +36,10 @@ Game::Game()
     sf::Texture playerTexture = loadTexture("../sprites/Cowboy150pxCropped.png").value_or(textureMap["error"]);
     textureMap.emplace(std::make_pair("playerTexture", playerTexture));
 
-    player.setTexture(textureMap.at("playerTexture"));
+    player.initTexture(textureMap.at("playerTexture"));
 
     // start the player in the middle of the screen
-    player.setPosition(HOR / 2 - player.getLocalBounds().width / 2, VER - player.getLocalBounds().height);
+    player.playerSprite.setPosition(HOR / 2 - player.playerSprite.getLocalBounds().width / 2, VER - player.playerSprite.getLocalBounds().height);
 }
 
 void Game::run()
@@ -123,15 +123,15 @@ Collision rectIntersect(sf::Sprite& player, sf::RectangleShape& rectangle)
 
 sf::Vector2f Game::checkBorderCollision(sf::Vector2f movement, sf::Time deltaTime)
 {
-    sf::Vector2f playerPos = player.getPosition();
-    sf::FloatRect playerBounds = player.getLocalBounds();
+    sf::Vector2f playerPos = player.playerSprite.getPosition();
+    sf::FloatRect playerBounds = player.playerSprite.getLocalBounds();
 
     sf::Vector2f movingTo = movement * deltaTime.asSeconds();
 
     // check to see if one side of the sprite is attempting to move out of bounds and if so set movement in that direction to 0
     if ((playerPos.y + playerBounds.height) + movingTo.y > VER) // bottom
     {
-        player.setPosition(playerPos.x, VER - playerBounds.height);
+        player.playerSprite.setPosition(playerPos.x, VER - playerBounds.height);
         inAir = false;
         movement.y = 0;
     }
@@ -193,14 +193,14 @@ void Game::update(sf::Time deltaTime) // 530.3f x & y for uniform diagonal
     movement.y += jumpVelocity / 2.0f; // gravity
 
     movement = checkBorderCollision(movement, deltaTime);
-    player.move(movement * deltaTime.asSeconds());
+    player.playerSprite.move(movement * deltaTime.asSeconds());
 }
 
 void Game::render()
 {
     // const sf::Color &color = Color(0, 0, 0, 255);
     window.clear(); // must call clear before drawing anything
-    window.draw(player);
+    window.draw(player.playerSprite);
     //window.draw(rect); // create an array of entities and loop to draw?
     window.display();
 }

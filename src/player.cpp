@@ -1,6 +1,9 @@
 #include "player.h"
 
-Player::Player(sf::Texture initTexture)
+Player::Player(){}
+
+void Player::initTexture(sf::Texture texture)
 {
-	this->texture = initTexture;
+    playerTexture = texture; // playerTexture variable must exist so that the texture is not destroyed
+    playerSprite.setTexture(playerTexture);
 }
