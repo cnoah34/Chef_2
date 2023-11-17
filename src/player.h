@@ -3,14 +3,14 @@
 
 #include <SFML/Graphics.hpp>
 
-class Game
+class Player
 {
-    /*
+
     public:
-        Player(sf::Texture texture);
+        Player(sf::Texture initTexture);
 
     private:
-    */
+        sf::Texture texture;
 };
 
 #endif
