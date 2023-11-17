@@ -15,9 +15,6 @@ class Game
     private:
         sf::RenderWindow window;
         sf::Sprite player;
-        sf::Sprite bricks;
-
-        sf::RectangleShape rect;
 
         std::unordered_map<std::string, sf::Texture> textureMap; // a map to contain all of the entity textures
 

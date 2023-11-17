@@ -110,14 +110,16 @@ void Game::processEvents()
 //     Bottom,
 // };
 
-// Collision rectIntersect(sf::Sprite& player, sf::RectangleShape& rectangle)
-// {
-//     sf::Vector2f playerPos = player.getPosition();
-//     sf::FloatRect playerBounds = player.getLocalBounds();
+/*
+Collision rectIntersect(sf::Sprite& player, sf::RectangleShape& rectangle)
+{
+      sf::Vector2f playerPos = player.getPosition();
+      sf::FloatRect playerBounds = player.getLocalBounds();
 
-//     sf::Vector2f rectPos = rectangle.getPosition();
-//     sf::FloatRect rectBounds = rectangle.getLocalBounds();
-// }
+     sf::Vector2f rectPos = rectangle.getPosition();
+     sf::FloatRect rectBounds = rectangle.getLocalBounds();
+ }
+ */
 
 sf::Vector2f Game::checkBorderCollision(sf::Vector2f movement, sf::Time deltaTime)
 {
@@ -141,30 +143,31 @@ sf::Vector2f Game::checkBorderCollision(sf::Vector2f movement, sf::Time deltaTim
         movement.x = 0;
 
     /*
-        // testing collisions with rectangles
-        sf::Vector2f rectPos = rect.getPosition(); // get the current position of the sprite
-        sf::FloatRect rectBounds = rect.getLocalBounds(); // gets the bounds of the sprite
+    // testing collisions with rectangles
+    sf::Vector2f rectPos = rect.getPosition(); // get the current position of the sprite
+    sf::FloatRect rectBounds = rect.getLocalBounds(); // gets the bounds of the sprite
 
-        // entity collisions
-        // falling
-        if(playerPos.x >= rectPos.x && playerPos.x <= (rectPos.x + rectBounds.width)
-            && (playerPos.y < rectPos.y)
-            && ((playerPos.y + playerBounds.height) + movingTo.y) > rectPos.y)
-            {
-                player.setPosition(playerPos.x, rectPos.y - playerBounds.height);
-                inAir = false;
-                movement.y = 0;
-            }
-        // jumping up into
-        if(playerPos.x + playerBounds.width >= rectPos.x
-            && playerPos.x <= (rectPos.x + rectBounds.width)
-            && (playerPos.y > rectPos.y)
-            && ((playerPos.y) + movingTo.y) < rectPos.y + rectBounds.height)
-            {
-                player.setPosition(playerPos.x, (rectPos.y + rectBounds.height));
-                movement.y = 0;
-            }
+    // entity collisions
+    // falling
+    if(playerPos.x >= rectPos.x && playerPos.x <= (rectPos.x + rectBounds.width)
+        && (playerPos.y < rectPos.y)
+        && ((playerPos.y + playerBounds.height) + movingTo.y) > rectPos.y)
+        {
+            player.setPosition(playerPos.x, rectPos.y - playerBounds.height);
+            inAir = false;
+            movement.y = 0;
+        }
+    // jumping up into
+    if(playerPos.x + playerBounds.width >= rectPos.x
+        && playerPos.x <= (rectPos.x + rectBounds.width)
+        && (playerPos.y > rectPos.y)
+        && ((playerPos.y) + movingTo.y) < rectPos.y + rectBounds.height)
+        {
+            player.setPosition(playerPos.x, (rectPos.y + rectBounds.height));
+            movement.y = 0;
+        }
     */
+    
 
     return movement;
 }
