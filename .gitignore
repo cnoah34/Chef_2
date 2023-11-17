@@ -1,5 +1,4 @@
 *dll
-/src
 *.o
 *.exe
 .vscode
