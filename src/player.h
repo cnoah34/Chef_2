@@ -5,11 +5,12 @@
 
 class Game
 {
+    /*
     public:
         Player(sf::Texture texture);
 
     private:
-
+    */
 };
 
 #endif

@@ -1,15 +1,27 @@
 cmake_minimum_required(VERSION 3.16)
-project(chef_2)
+project(CMakeSFMLProject LANGUAGES CXX)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
+include(FetchContent)
+FetchContent_Declare(SFML
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 2.6.x)
+FetchContent_MakeAvailable(SFML)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+add_executable(CMakeSFMLProject ${SOURCES})
+target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics)
+target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 
-include_directories(${CMAKE_SOURCE_DIR}/inc ${CMAKE_SOURCE_DIR}/src)
-link_directories(${CMAKE_SOURCE_DIR}/lib)
+if(WIN32)
+    add_custom_command(
+        TARGET CMakeSFMLProject
+        COMMENT "Copy OpenAL DLL"
+        PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:CMakeSFMLProject>
+        VERBATIM)
+endif()
 
-add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics sfml-system sfml-window)
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-
-install(TARGETS ${PROJECT_NAME})
+install(TARGETS CMakeSFMLProject)
