@@ -14,7 +14,7 @@
 std::optional<sf::Texture> loadTexture(const std::string& filename)
 {
     sf::Texture tex;
-    if(!tex.loadFromFile(filename))
+    if (!tex.loadFromFile(filename))
     {
         return std::nullopt; // if the filename does not load, return a null optional
     }
@@ -22,10 +22,10 @@ std::optional<sf::Texture> loadTexture(const std::string& filename)
 }
 
 Game::Game()
-: window(sf::VideoMode(HOR, VER), "Chef: The Second Course", sf::Style::Close | sf::Style::Titlebar)
+    : window(sf::VideoMode(HOR, VER), "Chef: The Second Course", sf::Style::Close | sf::Style::Titlebar)
 {
-    auto errorTexOpt = loadTexture("sprites/errorTexture.jpg");
-    if(!errorTexOpt)
+    auto errorTexOpt = loadTexture("../src/sprites/errorTexture.jpg");
+    if (!errorTexOpt)
     {
         window.close();
     }
@@ -33,13 +33,13 @@ Game::Game()
     textureMap.emplace(std::make_pair("error", errorTexOpt.value())); // place the error texture into the map
 
     // load the player texture and if the texture cannot load, assign it the error texture
-    sf::Texture playerTexture = loadTexture("sprites/Cowboy150pxCropped.png").value_or(textureMap["error"]);
+    sf::Texture playerTexture = loadTexture("../src/sprites/Cowboy150pxCropped.png").value_or(textureMap["error"]);
     textureMap.emplace(std::make_pair("playerTexture", playerTexture));
 
     player.setTexture(textureMap.at("playerTexture"));
 
     // start the player in the middle of the screen
-    player.setPosition(HOR/2 - player.getLocalBounds().width/2, VER - player.getLocalBounds().height);
+    player.setPosition(HOR / 2 - player.getLocalBounds().width / 2, VER - player.getLocalBounds().height);
 }
 
 void Game::run()
@@ -48,11 +48,11 @@ void Game::run()
     const sf::Time timePerFrame = sf::seconds(1.f / 60.f); // 60 fps
     sf::Time timeSinceLastUpdate = sf::Time::Zero; // start "timer"
 
-    while(window.isOpen()){
+    while (window.isOpen()) {
         processEvents();
 
         timeSinceLastUpdate += clock.restart();
-        while(timeSinceLastUpdate > timePerFrame)
+        while (timeSinceLastUpdate > timePerFrame)
         {
             timeSinceLastUpdate -= timePerFrame;
             processEvents();
@@ -65,39 +65,39 @@ void Game::run()
 
 void Game::playerInput(sf::Keyboard::Key key, bool isPressed)
 {
-    if(key == sf::Keyboard::W)
+    if (key == sf::Keyboard::W)
     {
-        if(isPressed && !inAir)
+        if (isPressed && !inAir)
         {
             jumpFrames = 10;
         }
     }
-    if(key == sf::Keyboard::S)
+    if (key == sf::Keyboard::S)
         crouch = isPressed;
-    if(key == sf::Keyboard::A)
+    if (key == sf::Keyboard::A)
         movingLeft = isPressed;
-    if(key == sf::Keyboard::D)
-        movingRight = isPressed;       
+    if (key == sf::Keyboard::D)
+        movingRight = isPressed;
 }
 
 void Game::processEvents()
 {
     sf::Event event;
-    while(window.pollEvent(event))
+    while (window.pollEvent(event))
     {
-        switch(event.type)
+        switch (event.type)
         {
-            case sf::Event::KeyPressed:
-                playerInput(event.key.code, true);
-                break;
-            case sf::Event::KeyReleased:
-                playerInput(event.key.code, false);
-                break;
-            case sf::Event::Closed:
-                window.close();
-                break;
-            default:
-                break;
+        case sf::Event::KeyPressed:
+            playerInput(event.key.code, true);
+            break;
+        case sf::Event::KeyReleased:
+            playerInput(event.key.code, false);
+            break;
+        case sf::Event::Closed:
+            window.close();
+            break;
+        default:
+            break;
         }
     }
 }
@@ -127,44 +127,44 @@ sf::Vector2f Game::checkBorderCollision(sf::Vector2f movement, sf::Time deltaTim
     sf::Vector2f movingTo = movement * deltaTime.asSeconds();
 
     // check to see if one side of the sprite is attempting to move out of bounds and if so set movement in that direction to 0
-    if((playerPos.y + playerBounds.height) + movingTo.y > VER) // bottom
+    if ((playerPos.y + playerBounds.height) + movingTo.y > VER) // bottom
     {
         player.setPosition(playerPos.x, VER - playerBounds.height);
         inAir = false;
         movement.y = 0;
     }
-    if((playerPos.y) + movingTo.y < 0) // top
+    if ((playerPos.y) + movingTo.y < 0) // top
         movement.y = 0;
-    if((playerPos.x + playerBounds.width) + movingTo.x > HOR) // right
+    if ((playerPos.x + playerBounds.width) + movingTo.x > HOR) // right
         movement.x = 0;
-    if((playerPos.x) + movingTo.x < 0) // left
+    if ((playerPos.x) + movingTo.x < 0) // left
         movement.x = 0;
-        
-/*
-    // testing collisions with rectangles
-    sf::Vector2f rectPos = rect.getPosition(); // get the current position of the sprite
-    sf::FloatRect rectBounds = rect.getLocalBounds(); // gets the bounds of the sprite
 
-    // entity collisions
-    // falling
-    if(playerPos.x >= rectPos.x && playerPos.x <= (rectPos.x + rectBounds.width)
-        && (playerPos.y < rectPos.y)
-        && ((playerPos.y + playerBounds.height) + movingTo.y) > rectPos.y)
-        {
-            player.setPosition(playerPos.x, rectPos.y - playerBounds.height);
-            inAir = false;
-            movement.y = 0;
-        }
-    // jumping up into
-    if(playerPos.x + playerBounds.width >= rectPos.x
-        && playerPos.x <= (rectPos.x + rectBounds.width)
-        && (playerPos.y > rectPos.y)
-        && ((playerPos.y) + movingTo.y) < rectPos.y + rectBounds.height)
-        {
-            player.setPosition(playerPos.x, (rectPos.y + rectBounds.height));
-            movement.y = 0;
-        }
-*/
+    /*
+        // testing collisions with rectangles
+        sf::Vector2f rectPos = rect.getPosition(); // get the current position of the sprite
+        sf::FloatRect rectBounds = rect.getLocalBounds(); // gets the bounds of the sprite
+
+        // entity collisions
+        // falling
+        if(playerPos.x >= rectPos.x && playerPos.x <= (rectPos.x + rectBounds.width)
+            && (playerPos.y < rectPos.y)
+            && ((playerPos.y + playerBounds.height) + movingTo.y) > rectPos.y)
+            {
+                player.setPosition(playerPos.x, rectPos.y - playerBounds.height);
+                inAir = false;
+                movement.y = 0;
+            }
+        // jumping up into
+        if(playerPos.x + playerBounds.width >= rectPos.x
+            && playerPos.x <= (rectPos.x + rectBounds.width)
+            && (playerPos.y > rectPos.y)
+            && ((playerPos.y) + movingTo.y) < rectPos.y + rectBounds.height)
+            {
+                player.setPosition(playerPos.x, (rectPos.y + rectBounds.height));
+                movement.y = 0;
+            }
+    */
 
     return movement;
 }
@@ -175,19 +175,19 @@ void Game::update(sf::Time deltaTime) // 530.3f x & y for uniform diagonal
 
     float jumpVelocity = 2000.f;
 
-    if(jumpFrames > 0)
+    if (jumpFrames > 0)
     {
         movement.y -= jumpVelocity;
         inAir = true;
         jumpFrames--;
     }
     //if(crouch)
-    if(movingLeft)
+    if (movingLeft)
         movement.x -= 750.f;
-    if(movingRight)
+    if (movingRight)
         movement.x += 750.f;
 
-    movement.y += jumpVelocity/2.0f; // gravity
+    movement.y += jumpVelocity / 2.0f; // gravity
 
     movement = checkBorderCollision(movement, deltaTime);
     player.move(movement * deltaTime.asSeconds());
