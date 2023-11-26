@@ -1,5 +1,4 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include "player.h"
@@ -26,5 +25,3 @@ class Game
         void update(sf::Time deltaTime);
         void render();
 };
-
-#endif

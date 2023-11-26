@@ -1,5 +1,4 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -21,5 +20,3 @@ class Player
         // should move some public members to private when the class is closer to being finished
     private:
 };
-
-#endif

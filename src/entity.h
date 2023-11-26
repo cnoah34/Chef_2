@@ -1,5 +1,4 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -11,5 +10,3 @@ class Entity
     private:
 
 };
-
-#endif
