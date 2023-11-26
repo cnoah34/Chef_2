@@ -13,29 +13,35 @@ Player::Player(sf::Texture& texture)
     sprite.setTexture(texture);
 }
 
-bool Player::onGround(sf::Time deltaTime)
+void Player::handleBorderCollision(sf::Time deltaTime)
 {
-    sf::Vector2f movingTo = velocity * deltaTime.asSeconds(); // where the sprite is attempting to move to
+    sf::Vector2f movingTo = velocity * deltaTime.asSeconds(); 
 
-    if (sprite.getPosition().y + sprite.getLocalBounds().height + movingTo.y > 600) // bottom
-    {
-        return true;
+    // left
+    if (sprite.getPosition().x + movingTo.x < 0) {
+        velocity.x = 0;
+        sprite.setPosition(0, sprite.getPosition().y);
     }
-    else
-        return false;
-}
 
-bool Player::checkBorderCollision(sf::Time deltaTime)
-{
-    sf::Vector2f movingTo = velocity * deltaTime.asSeconds(); // where the sprite is attempting to move to
+    // right
+    if (sprite.getPosition().x + sprite.getLocalBounds().width + movingTo.x > 800) {
+        velocity.x = 0;
+        sprite.setPosition(800-sprite.getLocalBounds().width, sprite.getPosition().y);
+    }
 
-    if ((sprite.getPosition().y) + movingTo.y < 0) // top
-        velocity.y = 0; // IMPORTANT - need to move, works but really shouldn't be in a bool function
+    // top
+    if ((sprite.getPosition().y) + movingTo.y < 0) {
+        velocity.y = 0;
+        sprite.setPosition(sprite.getPosition().x, 0);
+    }
 
-    if (sprite.getPosition().x + sprite.getLocalBounds().width + movingTo.x > 800 || sprite.getPosition().x + movingTo.x < 0) // left || right
-        return true;
-    else
-        return false;
+    // bottom
+    if (sprite.getPosition().y + sprite.getLocalBounds().height + movingTo.y > 600) {
+        inAir = false;
+        velocity.y = 0;
+        velocity.x = velocity.x * 0.9f;
+        sprite.setPosition(sprite.getPosition().x, 600-sprite.getLocalBounds().height);
+    }
 }
 
 
@@ -53,19 +59,13 @@ void Player::update(sf::Time deltaTime)
 
     velocity.y += JUMP_ACCELERATION/15; // gravity - change denominator to affect
 
-    if (checkBorderCollision(deltaTime))
-        velocity.x = 0;
-    if (onGround(deltaTime)) {
-        inAir = false;
-        velocity.y = 0;
-        velocity.x = velocity.x * 0.9f;
-    }
-
     // max left & right velocity
     if (velocity.x > MAX_VELOCITY)
         velocity.x = MAX_VELOCITY;
     else if (velocity.x < -(MAX_VELOCITY))
         velocity.x = -(MAX_VELOCITY);
+
+    handleBorderCollision(deltaTime);
 
     sprite.move(velocity * deltaTime.asSeconds());
 }

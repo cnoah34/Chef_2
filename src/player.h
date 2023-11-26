@@ -9,8 +9,7 @@ class Player
         Player();
         Player(sf::Texture& texture);
         void update(sf::Time deltaTime);
-        bool onGround(sf::Time deltaTime);
-        bool checkBorderCollision(sf::Time deltaTime);
+        void handleBorderCollision(sf::Time deltaTime);
 
         sf::Sprite sprite;
         sf::Vector2f velocity{ 0.0f, 0.0f };

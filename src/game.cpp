@@ -29,15 +29,20 @@ Game::Game()
 
     textureMap.emplace(std::make_pair("error", errorTexOpt.value())); // place the error texture into the map
 
-    // load the player texture and if the texture cannot load, assign it the error texture
-    sf::Texture playerTexture = loadTexture("../sprites/CowboyCropped.png").value_or(textureMap["error"]);
-    textureMap.emplace(std::make_pair("playerTexture", playerTexture));
+    // load a texture, if the texture cannot load assign it the error texture
+    textureMap.emplace(std::make_pair("playerTexture", 
+        loadTexture("../sprites/CowboyCropped.png").value_or(textureMap["error"])));
+
+    textureMap.emplace(std::make_pair("bricks", 
+        loadTexture("../sprites/bricks.jpg").value_or(textureMap["error"])));
 
     // initialize texture and set the player's position to the middle of the screen
     Player newPlayer(textureMap.at("playerTexture"));
     newPlayer.sprite.setPosition(HOR / 2 - newPlayer.sprite.getLocalBounds().width / 2, VER - newPlayer.sprite.getLocalBounds().height);
 
     player = newPlayer;
+
+    entityVec.push_back(Entity(textureMap.at("bricks")));
 }
 
 void Game::run()
@@ -63,14 +68,26 @@ void Game::run()
 
 void Game::playerInput(sf::Keyboard::Key key, bool isPressed)
 {
-    if (key == sf::Keyboard::W)
-        player.jumping = isPressed;
-    if (key == sf::Keyboard::S)
-        player.crouching = isPressed;
-    if (key == sf::Keyboard::A)
-        player.movingLeft = isPressed;
-    if (key == sf::Keyboard::D)
-        player.movingRight = isPressed;
+    switch (key)
+    {
+        case sf::Keyboard::Escape:
+            window.close();
+            break;
+        case sf::Keyboard::W:
+            player.jumping = isPressed;
+            break;
+        case sf::Keyboard::S:
+            player.crouching = isPressed;
+            break;
+        case sf::Keyboard::A:
+            player.movingLeft = isPressed;
+            break;
+        case sf::Keyboard::D:
+            player.movingRight = isPressed;
+            break;
+        default:
+            break;
+    }
 }
 
 void Game::processEvents()
@@ -80,25 +97,23 @@ void Game::processEvents()
     {
         switch (event.type)
         {
-        case sf::Event::KeyPressed:
-            playerInput(event.key.code, true);
-            break;
-        case sf::Event::KeyReleased:
-            playerInput(event.key.code, false);
-            break;
-        case sf::Event::Closed:
-            window.close();
-            break;
-        default:
-            break;
+            case sf::Event::KeyPressed:
+                playerInput(event.key.code, true);
+                break;
+            case sf::Event::KeyReleased:
+                playerInput(event.key.code, false);
+                break;
+            case sf::Event::Closed:
+                window.close();
+                break;
+            default:
+                break;
         }
     }
 }
 
 void Game::update(sf::Time deltaTime) // 530.3f x & y for uniform diagonal
 {
-    sf::Vector2f movement(0.f, 0.f);
-
     player.update(deltaTime);
 }
 
@@ -106,5 +121,9 @@ void Game::render()
 {
     window.clear(); // must call clear before drawing anything
     window.draw(player.sprite);
+    for (int i = 0; i < entityVec.size(); i++)
+    {
+        window.draw(entityVec[i].sprite);
+    }
     window.display();
 }
