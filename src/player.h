@@ -8,11 +8,17 @@ class Player
 
     public:
         Player();
-        void initTexture(sf::Texture texture);
+        Player(sf::Texture& texture);
+        void update(sf::Time deltaTime);
+        bool onGround(sf::Time deltaTime);
+        bool checkBorderCollision(sf::Time deltaTime);
 
-        sf::Texture playerTexture;
-        sf::Sprite playerSprite;
+        sf::Sprite sprite;
+        sf::Vector2f velocity{ 0.0f, 0.0f };
 
+        bool movingLeft = false, movingRight = false, jumping = false, inAir = false, crouching = false;
+
+        // should move some public members to private when the class is closer to being finished
     private:
 };
 
