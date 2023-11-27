@@ -1,8 +1,12 @@
 #include "player.h"
 
+// need to figure out how to put HOR & VER in one place, currently in game.cpp and player.cpp
+#define HOR 800
+#define VER 600
 #define MAX_VELOCITY 750.f
 #define X_ACCELERATION 100.f
 #define JUMP_ACCELERATION 2000.f
+#define FRICTION 0.85f
 
 Player::Player()
 {
@@ -24,9 +28,9 @@ void Player::handleBorderCollision(sf::Time deltaTime)
     }
 
     // right
-    if (sprite.getPosition().x + sprite.getLocalBounds().width + movingTo.x > 800) {
+    if (sprite.getPosition().x + sprite.getLocalBounds().width + movingTo.x > HOR) {
         velocity.x = 0;
-        sprite.setPosition(800-sprite.getLocalBounds().width, sprite.getPosition().y);
+        sprite.setPosition(HOR-sprite.getLocalBounds().width, sprite.getPosition().y);
     }
 
     // top
@@ -36,11 +40,11 @@ void Player::handleBorderCollision(sf::Time deltaTime)
     }
 
     // bottom
-    if (sprite.getPosition().y + sprite.getLocalBounds().height + movingTo.y > 600) {
+    if (sprite.getPosition().y + sprite.getLocalBounds().height + movingTo.y > VER) {
         inAir = false;
         velocity.y = 0;
-        velocity.x = velocity.x * 0.9f;
-        sprite.setPosition(sprite.getPosition().x, 600-sprite.getLocalBounds().height);
+        velocity.x = velocity.x * FRICTION;
+        sprite.setPosition(sprite.getPosition().x, VER-sprite.getLocalBounds().height);
     }
 }
 

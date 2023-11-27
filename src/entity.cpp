@@ -11,6 +11,6 @@ Entity::Entity(sf::Texture& texture)
     sf::Vector2f scale = sprite.getScale();
 
     // NOT DONE
-    sprite.setScale(scale.x * .4, scale.y * .1);
+    sprite.setScale(scale.x * .1, scale.y * .1);
 
 }
