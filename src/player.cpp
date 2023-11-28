@@ -7,6 +7,7 @@
 #define X_ACCELERATION 100.f
 #define JUMP_ACCELERATION 2000.f
 #define FRICTION 0.85f
+#define GRAVITY 150.f
 
 Player::Player()
 {
@@ -61,7 +62,7 @@ void Player::update(sf::Time deltaTime)
     if (movingRight)
         velocity.x += X_ACCELERATION;
 
-    velocity.y += JUMP_ACCELERATION/15; // gravity - change denominator to affect
+    velocity.y += GRAVITY; // gravity
 
     // max left & right velocity
     if (velocity.x > MAX_VELOCITY)

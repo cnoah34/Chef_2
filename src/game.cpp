@@ -21,8 +21,9 @@ std::optional<sf::Texture> loadTexture(const std::string& filename)
 Game::Game()
     : window(sf::VideoMode(HOR, VER), "Chef: The Second Course", sf::Style::Close | sf::Style::Titlebar)
 {
+    // errorTexOpt will either be the error texture or null
     std::optional<sf::Texture> errorTexOpt = loadTexture("../sprites/errorTexture188px.jpg");
-    if (!errorTexOpt)
+    if (!errorTexOpt) 
     {
         window.close();
     }
