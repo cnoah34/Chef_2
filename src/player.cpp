@@ -1,25 +1,20 @@
 #include "player.h"
 
 // need to figure out how to put HOR & VER in one place, currently in game.cpp and player.cpp
-#define HOR 800
-#define VER 600
-#define MAX_VELOCITY 750.f
+#define MAX_X_VELOCITY 800.f
 #define X_ACCELERATION 100.f
 #define JUMP_ACCELERATION 2000.f
-#define FRICTION 0.85f
+#define FRICTION 0.88f
 #define GRAVITY 150.f
 
-Player::Player()
-{
+Player::Player() {
 }
 
-Player::Player(sf::Texture& texture)
-{
+Player::Player(sf::Texture& texture) {
     sprite.setTexture(texture);
 }
 
-void Player::handleBorderCollision(sf::Time deltaTime)
-{
+void Player::handleBorderCollision(sf::Time deltaTime, sf::Vector2u windowSize) {
     sf::Vector2f movingTo = velocity * deltaTime.asSeconds(); 
 
     // left
@@ -29,9 +24,9 @@ void Player::handleBorderCollision(sf::Time deltaTime)
     }
 
     // right
-    if (sprite.getPosition().x + sprite.getLocalBounds().width + movingTo.x > HOR) {
+    if (sprite.getPosition().x + sprite.getLocalBounds().width + movingTo.x > windowSize.x) {
         velocity.x = 0;
-        sprite.setPosition(HOR-sprite.getLocalBounds().width, sprite.getPosition().y);
+        sprite.setPosition(windowSize.x-sprite.getLocalBounds().width, sprite.getPosition().y);
     }
 
     // top
@@ -41,18 +36,17 @@ void Player::handleBorderCollision(sf::Time deltaTime)
     }
 
     // bottom
-    if (sprite.getPosition().y + sprite.getLocalBounds().height + movingTo.y > VER) {
+    if (sprite.getPosition().y + sprite.getLocalBounds().height + movingTo.y > windowSize.y) {
         inAir = false;
         velocity.y = 0;
-        velocity.x = velocity.x * FRICTION;
-        sprite.setPosition(sprite.getPosition().x, VER-sprite.getLocalBounds().height);
+        velocity.x *= FRICTION;
+        sprite.setPosition(sprite.getPosition().x, windowSize.y-sprite.getLocalBounds().height);
     }
 }
 
 
-void Player::update(sf::Time deltaTime)
-{
-    //if(crouching)
+void Player::update(sf::Time deltaTime, sf::Vector2u windowSize) {
+    // if (crouching)
     if (jumping && !inAir) {
         inAir = true;
         velocity.y -= JUMP_ACCELERATION;
@@ -65,12 +59,12 @@ void Player::update(sf::Time deltaTime)
     velocity.y += GRAVITY; // gravity
 
     // max left & right velocity
-    if (velocity.x > MAX_VELOCITY)
-        velocity.x = MAX_VELOCITY;
-    else if (velocity.x < -(MAX_VELOCITY))
-        velocity.x = -(MAX_VELOCITY);
+    if (velocity.x > MAX_X_VELOCITY)
+        velocity.x = MAX_X_VELOCITY;
+    else if (velocity.x < -(MAX_X_VELOCITY))
+        velocity.x = -(MAX_X_VELOCITY);
 
-    handleBorderCollision(deltaTime);
+    handleBorderCollision(deltaTime, windowSize);
 
     sprite.move(velocity * deltaTime.asSeconds());
 }

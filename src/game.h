@@ -2,13 +2,13 @@
 
 #include <SFML/Graphics.hpp>
 #include "player.h"
+#include "tile.h"
 #include "entity.h"
 
 #include <unordered_map>
 #include <string>
 
-class Game
-{
+class Game {
     public:
         Game();
         void run();
@@ -18,7 +18,8 @@ class Game
 
         Player player;
 
-        std::vector<Entity> entityVec;
+        // vector of vectors containing tiles
+        std::vector<std::vector<Tile>> tileVec;
 
         std::unordered_map<std::string, sf::Texture> textureMap; // a map to contain all of the entity textures
 

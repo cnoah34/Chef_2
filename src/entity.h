@@ -2,15 +2,10 @@
 
 #include <SFML/Graphics.hpp>
 
-class Entity
-{
+class Entity {
     public:
         Entity();
         Entity(sf::Texture& texture);
 
         sf::Sprite sprite;
-
-
-    private:
-
 };
