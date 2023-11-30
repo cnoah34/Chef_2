@@ -1,8 +1,7 @@
-#include <optional>
-#include <iostream>
-#include <string>
-
 #include "game.h"
+
+#include <optional>
+#include <string>
 
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720

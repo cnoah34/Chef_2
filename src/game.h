@@ -1,12 +1,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <unordered_map>
+
 #include "player.h"
 #include "tile.h"
 #include "entity.h"
-
-#include <unordered_map>
-#include <string>
 
 class Game {
     public:
