@@ -5,7 +5,6 @@
 class Player {
     public:
         Player();
-        Player(sf::Texture& texture);
         void update(sf::Time deltaTime, sf::Vector2u windowSize);
         void handleBorderCollision(sf::Time deltaTime, sf::Vector2u windowSize);
 

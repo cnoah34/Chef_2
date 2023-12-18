@@ -28,20 +28,30 @@ Game::Game()
 
     // load a texture, if the texture cannot load assign it the error texture
     textureMap.emplace(std::make_pair("playerTexture", loadTexture("../sprites/CowboyCropped.png").value_or(textureMap["error"])));
-    textureMap.emplace(std::make_pair("bricks", loadTexture("../sprites/bricks.jpg").value_or(textureMap["error"])));
+    textureMap.emplace(std::make_pair("tileMap", loadTexture("../sprites/tileMap.png").value_or(textureMap["error"])));
 
     // initialize texture and set the player's position to the middle of the screen
-    Player newPlayer(textureMap.at("playerTexture"));
-    newPlayer.sprite.setPosition(window.getSize().x / 2 - newPlayer.sprite.getLocalBounds().width / 2, window.getSize().y - newPlayer.sprite.getLocalBounds().height);
+    player.sprite.setTexture(textureMap.at("playerTexture"));
+    player.sprite.setPosition(window.getSize().x / 2 - player.sprite.getLocalBounds().width / 2, window.getSize().y - player.sprite.getLocalBounds().height);
 
-    player = newPlayer;
+    // 9 rows, 16 col, 80px 
+    int tiles[9][16] = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        };
+    
 
     for(int row = 0; row < window.getSize().y / TILE_SIZE; row++) {
         std::vector<Tile> rowVec;
         for(int col = 0; col < window.getSize().x / TILE_SIZE; col++) {
-            int x_start = col * TILE_SIZE;
-            int y_start = row * TILE_SIZE;
-            rowVec.push_back(Tile(textureMap.at("bricks"), TILE_SIZE, x_start, y_start));
+            // texture, size of a tile, col pos, row pos, tile type
+            rowVec.push_back(Tile(textureMap.at("tileMap"), TILE_SIZE, row, col, tiles[row][col]));
         }
         tileVec.push_back(rowVec);
     }

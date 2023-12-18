@@ -9,10 +9,6 @@
 Player::Player() {
 }
 
-Player::Player(sf::Texture& texture) {
-    sprite.setTexture(texture);
-}
-
 void Player::handleBorderCollision(sf::Time deltaTime, sf::Vector2u windowSize) {
     sf::Vector2f movingTo = velocity * deltaTime.asSeconds(); 
 
