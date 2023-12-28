@@ -1,6 +1,7 @@
 *dll
 *.o
 *.exe
+*.swp
 .vscode
 .vs
 out
