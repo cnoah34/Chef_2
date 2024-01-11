@@ -14,13 +14,9 @@ class Game {
 
     private:
         sf::RenderWindow window;
-
         Player player;
-
-        // vector of vectors containing tiles
         std::vector<std::vector<Tile>> tileVec;
-
-        std::unordered_map<std::string, sf::Texture> textureMap; // a map to contain all of the entity textures
+        std::unordered_map<std::string, sf::Texture> textureMap; // a map to contain all textures
 
         void playerInput(sf::Keyboard::Key key, bool isPressed);
 

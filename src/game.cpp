@@ -32,24 +32,23 @@ Game::Game()
 
     // initialize texture and set the player's position to the middle of the screen
     player.sprite.setTexture(textureMap.at("playerTexture"));
-    player.sprite.setPosition(window.getSize().x / 2 - player.sprite.getLocalBounds().width / 2, window.getSize().y - player.sprite.getLocalBounds().height);
+    player.sprite.setPosition(window.getSize().x / 2 - player.sprite.getLocalBounds().width / 2, window.getSize().y - player.sprite.getLocalBounds().height + TILE_SIZE);
 
-    // 9 rows, 16 col, 80px 
     int tiles[9][16] = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        };
-    
+        {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0},
+        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    };
 
-    for(int row = 0; row < window.getSize().y / TILE_SIZE; row++) {
+    for(int row = 0; row < (sizeof(tiles)/sizeof(tiles[0])); row++) {
         std::vector<Tile> rowVec;
-        for(int col = 0; col < window.getSize().x / TILE_SIZE; col++) {
+        for(int col = 0; col < (sizeof(tiles[0])/sizeof(int)); col++) {
             // texture, size of a tile, col pos, row pos, tile type
             rowVec.push_back(Tile(textureMap.at("tileMap"), TILE_SIZE, row, col, tiles[row][col]));
         }
@@ -60,9 +59,9 @@ Game::Game()
 void Game::run() {
     sf::Clock clock;
     const sf::Time timePerFrame = sf::seconds(1.f / 60.f); // 60 fps
-    sf::Time timeSinceLastUpdate = sf::Time::Zero; // start "timer"
+    sf::Time timeSinceLastUpdate = sf::Time::Zero; // start timer
 
-    while (window.isOpen()) {
+    while(window.isOpen()) {
         processEvents();
 
         timeSinceLastUpdate += clock.restart();
@@ -117,7 +116,17 @@ void Game::processEvents() {
 }
 
 void Game::update(sf::Time deltaTime) {
-    player.update(deltaTime, window.getSize());
+    player.update();
+
+    for(int row = 0; row < tileVec.size(); row++) {
+        for(int col = 0; col < tileVec[row].size(); col++) {
+            if(tileVec[row][col].tileType == 1) {
+                player.handleObjectCollision(deltaTime, tileVec[row][col].sprite);
+            }
+        }
+    }
+
+    player.move(deltaTime);
 }
 
 void Game::render() {
